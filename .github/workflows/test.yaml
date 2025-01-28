@@ -1,0 +1,32 @@
+name: Continuous Integration
+
+on:
+  push: # Quando acontecer um push
+    branches: # na Branch
+      - master # master
+  # ou
+  pull_request: # Quando acontecer um pull request
+    branches: # na branch
+      - master # master
+
+jobs: # Definição de Jobs
+  continuous-integration: # Nome do Job
+    runs-on: ubuntu-latest # Runner
+
+    steps:
+      - name: Checkout code # Nome do passo
+        uses: actions/checkout@v2 # Utiliza uma action do marketplace para fazer checkout do código
+
+      - name: Setup Go # Nome do passo
+        uses: actions/setup-go@v5 # Utiliza uma action do marketplace para configurar o ambiente go
+        with: # Configuração da action
+          go-version: '1.23.2' # Versão do Go
+
+      - name: Install dependencies # Nome do passo
+        run: go mod download # Executa o comando go mod download para baixar as dependências
+
+      - name: Run tests # Nome do passo
+        run: go test ./... -v # Executa o comando go test ./... -v para rodar os testes
+
+      - name: Build # Nome do passo
+        run: go build ./... # Executa o comando go build ./... para compilar o código
